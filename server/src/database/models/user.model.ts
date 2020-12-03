@@ -10,7 +10,7 @@ export enum UserState {
 export class UserModel extends Model {
   public id: number;
   public firstName: string;
-  public lastName: boolean;
+  public lastName: string;
   public email: string;
   public password: string;
   public state: UserState;
