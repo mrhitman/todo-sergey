@@ -1,6 +1,7 @@
 import { Global, Module } from '@nestjs/common';
 import * as Knex from 'knex';
 import { knexSnakeCaseMappers, Model } from 'objection';
+import { config } from 'src/config';
 
 const providers = [
   {
@@ -8,7 +9,7 @@ const providers = [
     useFactory: async () => {
       const knex = Knex({
         client: 'postgres',
-        connection: process.env.DATABASE_URL,
+        connection: config.database.url,
         debug: process.env.KNEX_DEBUG === 'true',
         pool: {
           min: 2,
