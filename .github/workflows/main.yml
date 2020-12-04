@@ -15,4 +15,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'todo-sergey'
           heroku_email: 'kabalx47@gmail.com'
+          appdir: 'server'
           usedocker: true
