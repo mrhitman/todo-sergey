@@ -24,7 +24,9 @@ export class AuthController {
 
   @Post('/login')
   public async login() {
-    return;
+    return {
+      message: 'This is login',
+    };
   }
 
   @Post('/refresh')
