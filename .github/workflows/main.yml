@@ -15,6 +15,7 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: 'todo-sergey'
           heroku_email: 'kabalx47@gmail.com'
+          healthcheck: 'https://todo-sergey.herokuapp.com/health'
           appdir: 'server'
           usedocker: true
       - run: heroku run yarn migrate
