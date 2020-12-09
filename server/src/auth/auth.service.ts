@@ -1,7 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcryptjs';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
+import { omit } from 'lodash';
 import { UserModel, UserState } from 'src/database/models/user.model';
+import { RefreshTokenModel } from '../database/models/refresh-token.model';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
@@ -25,5 +28,41 @@ export class AuthService {
         id: user.id,
       }),
     };
+  }
+
+  public async getUser(id: number) {
+    const user = await UserModel.query().findById(id);
+
+    if (!user) {
+      throw new BadRequestException('Invalid user');
+    }
+
+    return omit(user, ['password']);
+  }
+
+  public async validateUser(email: string, password: string) {
+    const user = await UserModel.query().findOne({ email });
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return omit(user, ['password']);
+    }
+  }
+
+  public async login(user: UserModel) {
+    const refreshToken = await RefreshTokenModel.query().insert({
+      token: uuid(),
+      userId: user.id,
+    });
+
+    return {
+      token: this.jwtService.sign({
+        id: user.id,
+      }),
+      refreshToken: refreshToken.token,
+    };
+  }
+
+  public async logout(user: UserModel) {
+    await RefreshTokenModel.query().delete().where({ userId: user.id });
   }
 }
