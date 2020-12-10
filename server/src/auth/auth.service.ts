@@ -65,4 +65,25 @@ export class AuthService {
   public async logout(user: UserModel) {
     await RefreshTokenModel.query().delete().where({ userId: user.id });
   }
+
+  public async refresh(user: UserModel, refreshToken: string) {
+    const token = await RefreshTokenModel.query().findOne({ token: refreshToken, userId: user.id });
+
+    if (token) {
+      throw new BadRequestException('Invalid refresh token');
+    }
+
+    await token.$query().delete();
+    const newToken = await RefreshTokenModel.query().insert({
+      token: uuid(),
+      userId: user.id,
+    });
+
+    return {
+      token: this.jwtService.sign({
+        id: user.id,
+      }),
+      refreshToken: newToken.token,
+    };
+  }
 }
