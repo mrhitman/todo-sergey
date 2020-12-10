@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Res, UseGuards, Logger } from '@nestjs/common';
 import { Response } from 'express';
+import { UserRole } from '../database/models/user.model';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './roles.decorator';
 
 @Controller('/')
 export class AuthController {
@@ -48,7 +51,14 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/me')
-  public async secured(@CurrentUser() user) {
+  public async me(@CurrentUser() user) {
+    return user;
+  }
+
+  @Get('/admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.admin)
+  public async test(@CurrentUser() user) {
     return user;
   }
 }
