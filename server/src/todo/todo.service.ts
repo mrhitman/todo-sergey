@@ -30,7 +30,7 @@ export class TodoService {
   public async create(user: UserModel, data: CreateTodoDto) {
     const todo = await TodoModel.query().insert({
       userId: user.id,
-      name: data.name,
+      ...data,
       isDone: data.isDone ?? false,
     });
 
@@ -42,8 +42,7 @@ export class TodoService {
     await todo
       .$query()
       .update({
-        name: data.name,
-        isDone: data.isDone,
+        ...data,
         updatedAt: new Date(),
       })
       .skipUndefined();

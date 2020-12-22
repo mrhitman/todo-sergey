@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@n
 import { CurrentUser } from '../auth/current-user';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTodoDto } from './dto/create-todo.dto';
-import { TodoService } from './todo.service';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { TodoService } from './todo.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('todo')

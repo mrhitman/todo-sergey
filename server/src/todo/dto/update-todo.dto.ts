@@ -4,6 +4,10 @@ export class UpdateTodoDto {
   @IsNumber()
   readonly id: number;
 
+  @IsNumber()
+  @IsOptional()
+  readonly price: number;
+
   @IsOptional()
   @IsString()
   readonly name: string;
