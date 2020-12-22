@@ -5,8 +5,8 @@ export class TodoModel extends Model {
   public name: string;
   public isDone: boolean;
   public userId: number;
-  public createdAt: number;
-  public updatedAt: number;
+  public createdAt: Date;
+  public updatedAt: Date;
 
   static get tableName() {
     return 'todo';
